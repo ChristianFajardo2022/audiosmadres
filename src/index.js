@@ -20,7 +20,7 @@ app.get('/export-users-csv', async (req, res) => {
     const users = snapshot.docs.map(doc => doc.data());
 
     // Especifica los campos que quieres incluir en el CSV
-    const fields = ['nombre', 'cedula', 'correoElectronico', 'numeroWhatsapp', 'audioRef'];
+    const fields = ['nombre', 'apellido', 'tipodocumento', 'numerodocumento', 'email','telefono','nombredestino','apellidodestino', 'pais', 'departamento', 'ciudad', 'direccion','audioRef'];
     const csv = parse(users, { fields });
 
     // Configura los headers para descargar el archivo
