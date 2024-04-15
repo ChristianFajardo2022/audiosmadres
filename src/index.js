@@ -100,6 +100,8 @@ app.get('/download-audio', async (req, res) => {
   }
 });
 
+// carga datos y envia a firbease
+
 app.post('/submit-form', upload.single('audio'), async (req, res) => {
   console.log("Received formData:", req.body.formData);
   console.log("Received file:", req.file);
@@ -108,11 +110,11 @@ app.post('/submit-form', upload.single('audio'), async (req, res) => {
     let audioRefPath = '';
 
     if (req.file) {
-      const fileName = `audios/${new Date().getTime()}.mp3`;
+      const fileName = `audios/${new Date().getTime()}.wav`;
       const audioRef = bucket.file(fileName);
       const stream = audioRef.createWriteStream({
         metadata: {
-          contentType: 'audio/mp3',
+          contentType: 'audio/wav', // Cambio a audio/wav
         }
       });
 
