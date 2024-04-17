@@ -103,7 +103,7 @@ app.get("/download-audio", async (req, res) => {
         .json({ success: false, message: "Audio file not found" });
     }
 
-    res.setHeader("Content-Type", "audio/wav");
+    res.setHeader("Content-Type", "audio/mp3");
     res.setHeader(
       "Content-Disposition",
       `attachment; filename="${encodeURIComponent(ref.split("/").pop())}"`
@@ -136,11 +136,11 @@ app.post("/submit-form", upload.single("audio"), async (req, res) => {
     let audioRefPath = "";
 
     if (req.file) {
-      const fileName = `audios/${new Date().getTime()}.wav`; // Cambio a formato .wav
+      const fileName = `audios/${new Date().getTime()}.mp3`; // Cambio a formato .wav
       const audioRef = bucket.file(fileName);
       const stream = audioRef.createWriteStream({
         metadata: {
-          contentType: "audio/wav", // Cambio a audio/wav
+          contentType: "audio/mp3", // Cambio a audio/wav
         },
       });
 
@@ -157,12 +157,10 @@ app.post("/submit-form", upload.single("audio"), async (req, res) => {
           ...formData,
           audioRef: audioRefPath,
         });
-        res
-          .status(201)
-          .send({
-            success: true,
-            message: "Data and audio uploaded successfully",
-          });
+        res.status(201).send({
+          success: true,
+          message: "Data and audio uploaded successfully",
+        });
       });
 
       stream.end(req.file.buffer);
