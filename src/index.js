@@ -180,16 +180,20 @@ app.post("/submit-form", upload.single("audio"), async (req, res) => {
 // Endpoint para recibir datos del JSON
 app.post("/alcarrito", async (req, res) => {
   try {
-    const { username, estado_transaccion, id_transaccion } = req.body;
+    const { customer_id, order_id, trx_status } = req.body;
 
     // Validar si los datos requeridos están presentes
-    if (!username || !estado_transaccion || !id_transaccion) {
+    if (!customer_id || !order_id || !trx_status) {
       return res.status(400).json({
         success: false,
-        message:
-          "Missing required fields: username, estado_transaccion, id_transaccion",
+        message: "Missing required fields: customer_id, order_id, trx_status",
       });
     }
+    // posibles estados de trx_status:
+    //approved
+    //pending
+    //canceled
+    //rejected
 
     // Aquí puedes procesar los datos recibidos como lo necesites
     // Por ejemplo, puedes almacenarlos en Firestore, en una base de datos SQL, etc.
@@ -199,7 +203,7 @@ app.post("/alcarrito", async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Data received successfully",
-      data: { username, estado_transaccion, id_transaccion },
+      data: { customer_id, order_id, trx_status },
     });
   } catch (error) {
     console.error("Error receiving data:", error);
