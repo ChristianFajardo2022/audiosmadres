@@ -177,6 +177,39 @@ app.post("/submit-form", upload.single("audio"), async (req, res) => {
   }
 });
 
+// Endpoint para recibir datos del JSON
+app.post("/alcarrito", async (req, res) => {
+  try {
+    const { username, estado_transaccion, id_transaccion } = req.body;
+
+    // Validar si los datos requeridos están presentes
+    if (!username || !estado_transaccion || !id_transaccion) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Missing required fields: username, estado_transaccion, id_transaccion",
+      });
+    }
+
+    // Aquí puedes procesar los datos recibidos como lo necesites
+    // Por ejemplo, puedes almacenarlos en Firestore, en una base de datos SQL, etc.
+    // También puedes realizar cualquier lógica adicional que requieras.
+
+    // Por ahora, simplemente enviamos una respuesta de éxito
+    res.status(200).json({
+      success: true,
+      message: "Data received successfully",
+      data: { username, estado_transaccion, id_transaccion },
+    });
+  } catch (error) {
+    console.error("Error receiving data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error processing your request",
+    });
+  }
+});
+
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Servidor ejecutandose sobre http://localhost:${port}`);
 });
