@@ -180,33 +180,88 @@ app.post("/submit-form", upload.single("audio"), async (req, res) => {
 // Endpoint para recibir datos del JSON
 app.post("/alcarrito", async (req, res) => {
   try {
-    const { customer_id, order_id, trx_status } = req.body;
+    const { username, estado_transaccion, id_transaccion } = req.body;
 
     // Validar si los datos requeridos están presentes
-    if (!customer_id || !order_id || !trx_status) {
+    if (!username || !estado_transaccion || !id_transaccion) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields: customer_id, order_id, trx_status",
+        message:
+          "Missing required fields: username, estado_transaccion, id_transaccion",
       });
     }
-    // posibles estados de trx_status:
-    //approved
-    //pending
-    //canceled
-    //rejected
 
-    // Aquí puedes procesar los datos recibidos como lo necesites
-    // Por ejemplo, puedes almacenarlos en Firestore, en una base de datos SQL, etc.
-    // También puedes realizar cualquier lógica adicional que requieras.
+    // Buscar al usuario en la base de datos
+    const usersRef = db.collection("usuarios");
+    const snapshot = await usersRef.where("username", "==", username).get();
 
-    // Por ahora, simplemente enviamos una respuesta de éxito
+    if (snapshot.empty) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Suponemos que solo hay un usuario con ese username
+    const userDoc = snapshot.docs[0];
+    const userData = userDoc.data();
+
+    // Actualizar solo los campos proporcionados y mantener los demás intactos
+    const updates = {
+      estado_transaccion: estado_transaccion,
+      id_transaccion: id_transaccion,
+      // Agrega aquí más campos si son necesarios
+    };
+
+    await usersRef.doc(userDoc.id).update(updates);
+
     res.status(200).json({
       success: true,
-      message: "Data received successfully",
-      data: { customer_id, order_id, trx_status },
+      message: "Data updated successfully",
+      data: updates,
     });
   } catch (error) {
-    console.error("Error receiving data:", error);
+    console.error("Error processing request:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error processing your request",
+    });
+  }
+});
+
+// Endpoint para enviar datos en pagina de gracias
+app.get("/get-user-data", async (req, res) => {
+  const { username } = req.query;
+
+  if (!username) {
+    return res.status(400).json({
+      success: false,
+      message: "Username is required",
+    });
+  }
+
+  try {
+    const usersRef = db.collection("usuarios");
+    const snapshot = await usersRef.where("username", "==", username).get();
+
+    if (snapshot.empty) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    let userData = [];
+    snapshot.forEach((doc) => {
+      userData.push({ id: doc.id, ...doc.data() });
+    });
+
+    res.json({
+      success: true,
+      data: userData,
+    });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
     res.status(500).json({
       success: false,
       message: "Error processing your request",
