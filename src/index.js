@@ -180,20 +180,21 @@ app.post("/submit-form", upload.single("audio"), async (req, res) => {
 // Endpoint para recibir datos del JSON
 app.post("/alcarrito", async (req, res) => {
   try {
-    const { username, estado_transaccion, id_transaccion } = req.body;
+    const { customer_id, trx_status, order_id } = req.body;
 
     // Validar si los datos requeridos están presentes
-    if (!username || !estado_transaccion || !id_transaccion) {
+    if (!customer_id || !trx_status || !order_id) {
       return res.status(400).json({
         success: false,
-        message:
-          "Missing required fields: username, estado_transaccion, id_transaccion",
+        message: "Missing required fields: customer_id, trx_status, order_id",
       });
     }
 
     // Buscar al usuario en la base de datos
     const usersRef = db.collection("usuarios");
-    const snapshot = await usersRef.where("username", "==", username).get();
+    const snapshot = await usersRef
+      .where("customer_id", "==", customer_id)
+      .get();
 
     if (snapshot.empty) {
       return res.status(404).json({
@@ -202,14 +203,14 @@ app.post("/alcarrito", async (req, res) => {
       });
     }
 
-    // Suponemos que solo hay un usuario con ese username
+    // Suponemos que solo hay un usuario con ese customer_id
     const userDoc = snapshot.docs[0];
     const userData = userDoc.data();
 
     // Actualizar solo los campos proporcionados y mantener los demás intactos
     const updates = {
-      estado_transaccion: estado_transaccion,
-      id_transaccion: id_transaccion,
+      trx_status: trx_status,
+      order_id: order_id,
       // Agrega aquí más campos si son necesarios
     };
 
@@ -231,18 +232,20 @@ app.post("/alcarrito", async (req, res) => {
 
 // Endpoint para enviar datos en pagina de gracias
 app.get("/get-user-data", async (req, res) => {
-  const { username } = req.query;
+  const { customer_id } = req.query;
 
-  if (!username) {
+  if (!customer_id) {
     return res.status(400).json({
       success: false,
-      message: "Username is required",
+      message: "customer_id is required",
     });
   }
 
   try {
     const usersRef = db.collection("usuarios");
-    const snapshot = await usersRef.where("username", "==", username).get();
+    const snapshot = await usersRef
+      .where("customer_id", "==", customer_id)
+      .get();
 
     if (snapshot.empty) {
       return res.status(404).json({
