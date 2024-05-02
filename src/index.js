@@ -24,18 +24,11 @@ app.get("/export-users-csv", async (req, res) => {
 
     // Especifica los campos que quieres incluir en el CSV
     const fields = [
-      "nombre",
-      "apellido",
-      "tipodocumento",
-      "numerodocumento",
+      "firstname",
       "email",
-      "telefono",
-      "nombredestino",
-      "apellidodestino",
-      "pais",
-      "departamento",
-      "ciudad",
-      "direccion",
+      "customer_id",
+      "order_id",
+      "trx_status",
       "audioRef",
     ];
     const csv = parse(users, { fields });
