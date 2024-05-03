@@ -6,7 +6,7 @@ import filterRoutes from "./routes/filterRoute.js";
 import downLoadRoute from "./routes/downLoadRoute.js";
 import submitFormRoute from "./routes/submitFormRoute.js";
 import alcarritoRoute from "./routes/alcarritoRoute.js";
-import getUserDataRoute from "./routes/getuserDataRoute.js";
+import getUserRoute from "./routes/getUserRoute.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,7 +32,7 @@ app.use("/", submitFormRoute);
 app.use("/", alcarritoRoute);
 
 // Endpoint para enviar datos en pagina de gracias
-app.use("/", getUserDataRoute);
+app.use("/", getUserRoute);
 
 app.listen(port, () => {
   console.log(`Servidor ejecutandose sobre http://localhost:${port}`);

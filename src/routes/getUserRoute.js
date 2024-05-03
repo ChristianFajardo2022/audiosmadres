@@ -1,9 +1,9 @@
 import express from "express";
 import { db } from "../config/firebaseAdminConfig.js";
 
-const getUserDataRoute = express.Router();
+const getUserRoute = express.Router();
 
-getUserDataRoute.get("/filter-users", async (req, res) => {
+getUserRoute.get("/filter-users", async (req, res) => {
   const { field, value } = req.query;
 
   if (!field || !value) {
@@ -35,4 +35,4 @@ getUserDataRoute.get("/filter-users", async (req, res) => {
   }
 });
 
-export default getUserDataRoute;
+export default getUserRoute;
