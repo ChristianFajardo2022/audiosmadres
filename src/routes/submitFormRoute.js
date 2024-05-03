@@ -1,6 +1,9 @@
 import express from "express";
 import { bucket } from "../config/firebaseAdminConfig.js";
 import { addDataToFirestore } from "../services/firestoreService.js";
+import multer from "multer";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const submitFormRoute = express.Router();
 

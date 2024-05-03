@@ -1,5 +1,5 @@
 import express from "express";
-import multer from "multer";
+
 import cors from "cors";
 import csvRoutes from "./routes/csvRoute.js";
 import filterRoutes from "./routes/filterRoute.js";
@@ -10,7 +10,6 @@ import getUserRoute from "./routes/getUserRoute.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
-const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
