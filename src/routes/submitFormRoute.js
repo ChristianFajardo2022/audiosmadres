@@ -1,8 +1,5 @@
-import { db, bucket } from "./config/firebaseAdminConfig.js";
-import {
-  addDataToFirestore,
-  getDataFromFirestore,
-} from "./services/firestoreService.js";
+import { bucket } from "../config/firebaseAdminConfig.js";
+import { addDataToFirestore } from "../services/firestoreService.js";
 
 const submitFormRoute = express.Router();
 
@@ -27,12 +24,10 @@ submitFormRoute.post(
 
         stream.on("error", (error) => {
           console.error("Error uploading file to Storage:", error);
-          res
-            .status(500)
-            .send({
-              success: false,
-              message: "Error uploading file to Storage",
-            });
+          res.status(500).send({
+            success: false,
+            message: "Error uploading file to Storage",
+          });
         });
 
         stream.on("finish", async () => {
