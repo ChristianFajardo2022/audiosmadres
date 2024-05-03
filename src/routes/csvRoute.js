@@ -2,9 +2,9 @@ import express from "express";
 import { parse } from "json2csv";
 import { db } from "../config/firebaseAdminConfig.js";
 
-const router = express.Router();
+const csvRoutes = express.Router();
 
-router.get("/export-users-csv", async (req, res) => {
+csvRoutes.get("/export-users-csv", async (req, res) => {
   try {
     const snapshot = await db.collection("usuarios").get();
     const users = snapshot.docs.map((doc) => doc.data());
@@ -30,4 +30,4 @@ router.get("/export-users-csv", async (req, res) => {
   }
 });
 
-export default router;
+export default csvRoutes;
