@@ -1,5 +1,4 @@
 import express from "express";
-
 import cors from "cors";
 import csvRoutes from "./routes/csvRoute.js";
 import filterRoutes from "./routes/filterRoute.js";
@@ -34,5 +33,5 @@ app.use("/", alcarritoRoute);
 app.use("/", getUserRoute);
 
 app.listen(port, () => {
-  console.log(`Servidor ejecutandose sobre http://localhost:${port}`);
+  console.log(`Servidor ejecutandose en produccion`);
 });
