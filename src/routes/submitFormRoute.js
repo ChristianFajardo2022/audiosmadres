@@ -1,3 +1,4 @@
+import express from "express";
 import { bucket } from "../config/firebaseAdminConfig.js";
 import { addDataToFirestore } from "../services/firestoreService.js";
 
