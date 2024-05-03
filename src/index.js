@@ -129,11 +129,11 @@ app.post("/submit-form", upload.single("audio"), async (req, res) => {
     let audioRefPath = "";
 
     if (req.file) {
-      const fileName = `audios/${new Date().getTime()}.mp3`; // Cambio a formato .wav
+      const fileName = `audios/${new Date().getTime()}.mp3`;
       const audioRef = bucket.file(fileName);
       const stream = audioRef.createWriteStream({
         metadata: {
-          contentType: "audio/mp3", // Cambio a audio/wav
+          contentType: "audio/mp3",
         },
       });
 
@@ -196,15 +196,12 @@ app.post("/alcarrito", async (req, res) => {
       });
     }
 
-    // Suponemos que solo hay un usuario con ese customer_id
     const userDoc = snapshot.docs[0];
     const userData = userDoc.data();
 
-    // Actualizar solo los campos proporcionados y mantener los demás intactos
     const updates = {
       trx_status: trx_status,
       order_id: order_id,
-      // Agrega aquí más campos si son necesarios
     };
 
     await usersRef.doc(userDoc.id).update(updates);
