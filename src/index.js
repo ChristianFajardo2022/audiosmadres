@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import cors from "cors";
-import { parse } from "json2csv";
+import csvRoutes from "./routes/csvRoutes.js";
 import { db, bucket } from "./config/firebaseAdminConfig.js";
 import {
   addDataToFirestore,
@@ -17,31 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Endpoint para descargar la base en .csv
-app.get("/export-users-csv", async (req, res) => {
-  try {
-    const snapshot = await db.collection("usuarios").get();
-    const users = snapshot.docs.map((doc) => doc.data());
-
-    // Especifica los campos que quieres incluir en el CSV
-    const fields = [
-      "firstname",
-      "email",
-      "customer_id",
-      "order_id",
-      "trx_status",
-      "audioRef",
-    ];
-    const csv = parse(users, { fields });
-
-    // Configura los headers para descargar el archivo
-    res.header("Content-Type", "text/csv");
-    res.attachment("usuarios.csv");
-    res.send(csv);
-  } catch (error) {
-    console.error("Error exporting users to CSV:", error);
-    res.status(500).send({ error: "Failed to export data" });
-  }
-});
+app.use("/", csvRoutes);
 
 // Endpoint para filtrar usuarios en el servidor
 app.get("/filter-users", async (req, res) => {
