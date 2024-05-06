@@ -31,17 +31,36 @@ alcarritoRoute.post("/alcarrito", async (req, res) => {
     const userDoc = snapshot.docs[0];
     const userData = userDoc.data();
 
+    console.log(userData);
+
+    // Verificar si trx_status es "approved" y stockUpdated es false
+    if (trx_status === "approved" && !userData.stockUpdated) {
+      // Actualizar el campo stockUpdated a true
+      await usersRef.doc(userDoc.id).update({ stockUpdated: true });
+
+      try {
+        const stockDocRef = db.collection("stock").doc("stock_osos");
+        const docSnap = await stockDocRef.get();
+
+        if (docSnap.exists) {
+          // Verificar si el DocumentSnapshot no es nulo
+          const currentStock = docSnap.data().stock;
+          await stockDocRef.update({
+            stock: currentStock - 1,
+          });
+          console.log("Stock restado exitosamente.");
+        } else {
+          console.log("Documento no encontrado.");
+        }
+      } catch (error) {
+        console.error("Error al restar el stock:", error);
+      }
+    }
+
     const updates = {
       trx_status: trx_status,
       order_id: order_id,
     };
-
-    await usersRef.doc(userDoc.id).update(updates);
-
-    if (userData.trx_status === "approved" && !userData.stockUpdated) {
-      //Actualizar el campo stockUpdated a true
-      await usersRef.doc(userDoc.id).update({ stockUpdated: true });
-    }
 
     res.status(200).json({
       success: true,
