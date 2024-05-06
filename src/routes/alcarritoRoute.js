@@ -38,6 +38,11 @@ alcarritoRoute.post("/alcarrito", async (req, res) => {
 
     await usersRef.doc(userDoc.id).update(updates);
 
+    if (userData.trx_status === "approved" && !userData.stockUpdated) {
+      //Actualizar el campo stockUpdated a true
+      await usersRef.doc(userDoc.id).update({ stockUpdated: true });
+    }
+
     res.status(200).json({
       success: true,
       message: "Data updated successfully",
