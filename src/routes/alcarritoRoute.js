@@ -3,9 +3,18 @@ import { db } from "../config/firebaseAdminConfig.js";
 
 const alcarritoRoute = express.Router();
 
+const normalizeString = (str) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
 alcarritoRoute.post("/alcarrito", async (req, res) => {
   try {
-    const { customer_id, trx_status, order_id } = req.body;
+    let { customer_id, trx_status, order_id } = req.body;
+
+    // Normalizar los caracteres
+    customer_id = normalizeString(customer_id);
+    trx_status = normalizeString(trx_status);
+    order_id = normalizeString(order_id);
 
     // Validar si los datos requeridos están presentes
     if (!customer_id || !trx_status || !order_id) {
