@@ -31,7 +31,12 @@ alcarritoRoute.post("/alcarrito", async (req, res) => {
     const userDoc = snapshot.docs[0];
     const userData = userDoc.data();
 
-    console.log(userData);
+    const updates = {
+      trx_status: trx_status,
+      order_id: order_id,
+    };
+
+    await usersRef.doc(userDoc.id).update(updates);
 
     // Verificar si trx_status es "approved" y stockUpdated es false
     if (trx_status === "approved" && !userData.stockUpdated) {
@@ -56,11 +61,6 @@ alcarritoRoute.post("/alcarrito", async (req, res) => {
         console.error("Error al restar el stock:", error);
       }
     }
-
-    const updates = {
-      trx_status: trx_status,
-      order_id: order_id,
-    };
 
     res.status(200).json({
       success: true,
