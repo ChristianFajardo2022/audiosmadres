@@ -17,6 +17,7 @@ csvRoutes.get("/export-users-csv", async (req, res) => {
       "order_id",
       "trx_status",
       "audioRef",
+      "createdAt",
     ];
     const csv = parse(users, { fields });
 
