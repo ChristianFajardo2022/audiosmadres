@@ -36,12 +36,14 @@ submitFormRoute.post(
 
         stream.on("finish", async () => {
           audioRefPath = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+          const timestampField = "createdAt"; // Nombre del campo de la marca de tiempo
           await addDataToFirestore(
             "usuarios",
             new Date().getTime().toString(),
             {
               ...formData,
               audioRef: audioRefPath,
+              [timestampField]: new Date(), // Agregar campo de marca de tiempo con la fecha y hora actual
             }
           );
           res.status(201).send({
