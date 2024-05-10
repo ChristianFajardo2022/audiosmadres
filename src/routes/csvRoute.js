@@ -11,7 +11,17 @@ csvRoutes.get("/export-users-csv", async (req, res) => {
       const userData = doc.data();
       // Convertir la fecha de Firestore a una cadena legible
       if (userData.createdAt && userData.createdAt.toDate) {
-        userData.createdAt = userData.createdAt.toDate().toLocaleString(); // O utiliza cualquier otro método de formateo de fecha
+        const createdAtUTC = userData.createdAt.toDate();
+        const createdAtUTCMinus5 = new Date(createdAtUTC.getTime()); // Resta 5 horas (en milisegundos)
+        userData.createdAt = new Intl.DateTimeFormat("en-US", {
+          timeZone: "America/Bogota",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }).format(createdAtUTCMinus5); // Formatea la fecha en UTC-5
       }
       return userData;
     });
