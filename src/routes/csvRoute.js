@@ -12,9 +12,7 @@ csvRoutes.get("/export-users-csv", async (req, res) => {
       // Convertir la fecha de Firestore a una cadena legible
       if (userData.createdAt && userData.createdAt.toDate) {
         const createdAtUTC = userData.createdAt.toDate();
-        const createdAtUTCMinus5 = new Date(
-          createdAtUTC.getTime() - 5 * 60 * 60 * 1000
-        ); // Resta 5 horas (en milisegundos)
+        const createdAtUTCMinus5 = new Date(createdAtUTC.getTime()); // Resta 5 horas (en milisegundos)
         userData.createdAt = new Intl.DateTimeFormat("en-US", {
           timeZone: "America/Bogota",
           year: "numeric",
